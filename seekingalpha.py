@@ -13,6 +13,17 @@ content = requests.get(url, headers={
 })
 
 soup = BeautifulSoup(content.text, 'html5lib')
-anchors = soup.select('#analysis-list-container ul li a')
+
+pagingURL = '/earnings/earnings-call-transcripts/'
+pageCountElement = soup.select('div#paging li.dots + li a')
+
+if len(pageCountElement) <= 0:
+	raise ValueError('Could not find page count.')
+totalPages = int(pageCountElement[0].text)
+print(totalPages)
+
+anchors = soup.select('#analysis-list-container ul li a.dashboard-article-link')
 for anchor in anchors:
+	print(anchor.text)
 	print(anchor['href'])
+
